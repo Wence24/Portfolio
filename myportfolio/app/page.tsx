@@ -29,6 +29,48 @@ const [showModal, setShowModal] = useState(false);
 
 const [animateTab, setAnimateTab] = useState(false);
 
+const portfolioCategories = [
+  { name: "Graphic Design", icon: Palette },
+  { name: "Video Edit", icon: Film },
+  { name: "Certificates", icon: Medal },
+] as const;
+
+const portfolioProjects: Record<
+  string,
+  Array<{
+    title: string;
+    description: string;
+    image: string;
+    designLink: string;
+    showDetailsModal?: boolean;
+  }>
+> = {
+  "Graphic Design": [
+    {
+      title: "COMRADZ Sessions",
+      description:
+        "A weekly poster designed to showcase the details of our Sunday dance sessions. Each poster highlights the schedule, theme, and key information for the day’s session, making it easy for participants to stay informed and join in. The design aims to be clear, engaging, and consistent, creating a recognizable visual identity for COMRADZ’s weekly gatherings.",
+      image: "/comradz.png",
+      designLink: "#",
+      showDetailsModal: true,
+    },
+    {
+      title: "Project Two",
+      description: "Description of Project Two",
+      image: "/comradz.png",
+      designLink: "#",
+    },
+    {
+      title: "Project Three",
+      description: "Description of Project Three",
+      image: "/comradz.png",
+      designLink: "#",
+    },
+  ],
+  "Video Edit": [],
+  Certificates: [],
+};
+
   // About Me typing + slide-in
 const [helloVisible, setHelloVisible] = useState(false); // slide in from left
 const [nameText, setNameText] = useState("");
@@ -877,211 +919,101 @@ const sideBtn = (id: string, Icon: any, ref: React.RefObject<HTMLDivElement>) =>
 
 {/* GLASSMORPHISM CONNECTED CONTAINER */}
 <div
-  className={`w-full max-w-7xl mx-auto -mt-1 rounded-xl backdrop-blur-xl bg-white/5 border border-white/10 shadow-lg shadow-black/10 p-2 flex flex-col lg:flex-row gap-4 transition-all duration-700 ${
+  className={`w-full max-w-7xl mx-auto -mt-1 rounded-xl backdrop-blur-xl bg-white/5 border border-white/10 shadow-lg shadow-black/10 p-2 lg:p-4 transition-all duration-700 ${
     showPortfolio ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
   }`}
   style={{ fontFamily: "Arial, sans-serif", transitionDelay: showPortfolio ? "0.4s" : "0s" }}
 >
-  {["Graphic Design", "Video Edit", "Certificates"].map((item, index) => (
-    <div
-      key={item}
-      onClick={() => {
-  setActiveBox(item);
-  setAnimateTab(false);
-
-  setTimeout(() => {
-    setAnimateTab(true);
-  }, 50);
-}}
-
-      className={`flex-1 w-full lg:w-[380px] flex flex-col items-center justify-center py-3 px-10 rounded-lg backdrop-blur-xl border border-white/10 shadow-sm transition-all duration-500 cursor-pointer
-        ${activeBox === item
-  ? "bg-[rgba(0,153,255,0.15)] shadow-[0_0_20px_rgba(0,153,255,0.3)]"
-  : "bg-white/1 opacity-60 hover:opacity-80"}
-
-      `}
-      style={{ animation: showPortfolio ? "fadeIn 0.7s ease forwards" : "none" }}
-    >
-      {item === "Graphic Design" && <Palette className="w-6 h-6 text-white mb-1" />}
-      {item === "Video Edit" && <Film className="w-6 h-6 text-white mb-1" />}
-      {item === "Certificates" && <Medal className="w-6 h-6 text-white mb-1" />}
-      <span className="font-bold text-sm text-white mb-0.5 text-center">{item}</span>
-    </div>
-    
-  ))}
- 
-
-  
-
-  {/* FADE-IN KEYFRAMES */}
-  <style jsx>{`
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  `}</style>
+  <div className="flex flex-col lg:flex-row gap-4">
+    {portfolioCategories.map((item) => {
+      const Icon = item.icon;
+      return (
+        <div
+          key={item.name}
+          onClick={() => {
+            setActiveBox(item.name);
+            setAnimateTab(false);
+            setTimeout(() => {
+              setAnimateTab(true);
+            }, 50);
+          }}
+          className={`flex-1 w-full lg:w-[380px] flex flex-col items-center justify-center py-3 px-10 rounded-lg backdrop-blur-xl border border-white/10 shadow-sm transition-all duration-500 cursor-pointer ${
+            activeBox === item.name
+              ? "bg-[rgba(0,153,255,0.15)] shadow-[0_0_20px_rgba(0,153,255,0.3)]"
+              : "bg-white/1 opacity-60 hover:opacity-80"
+          }`}
+          style={{ animation: showPortfolio ? "fadeIn 0.7s ease forwards" : "none" }}
+        >
+          <Icon className="w-6 h-6 text-white mb-1" />
+          <span className="font-bold text-sm text-white mb-0.5 text-center">{item.name}</span>
+        </div>
+      );
+    })}
   </div>
-{showPortfolio && activeBox === "Graphic Design" && (
-  <div
-    key={activeBox} // forces re-mount on tab switch
-    className="w-full max-w-7xl mx-auto mt-8 flex flex-col lg:flex-row gap-6"
-  >
-    {/* Project 1 */}
+
+  {showPortfolio && (
     <div
-  className="flex-1 bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg p-4 rounded-lg transition-all duration-700 hover:scale-105 hover:shadow-[0_0_15px_rgba(0,153,255,0.3)] hover:bg-white/20 opacity-0 translate-y-6 animate-fadeIn"
-  style={{ animationDelay: "0.2s" }}
->
-
-      <Image
-        src="/comradz.png"
-        alt="Project 1"
-        width={400}
-        height={250}
-        className="rounded-lg object-cover mb-4"
-      />
-      <h3 className="text-white text-m mb-1 project-heading tracking-wider">COMRADZ Sessions</h3>
-      <p className="text-xs text-white/80 mb-4 mt-2 line-clamp-3">
-        A weekly poster designed to showcase the details of our Sunday dance sessions. Each poster highlights the schedule, theme, and key information for the day’s session, making it easy for participants to stay informed and join in. The design aims to be clear, engaging, and consistent, creating a recognizable visual identity for COMRADZ’s weekly gatherings.
-      </p>
-
-      {/* Footer links */}
-      <div className="flex justify-between items-center mt-4">
-        <a
-          href="#"
-          className="flex items-center gap-2 text-xs text-[#0099ff] font-semibold hover:underline"
+      key={`${activeBox}-${animateTab ? "in" : "out"}`}
+      className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+    >
+      {(portfolioProjects[activeBox] || []).map((project, index) => (
+        <div
+          key={`${activeBox}-${project.title}-${index}`}
+          className="bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg p-4 rounded-lg transition-all duration-700 hover:scale-105 hover:shadow-[0_0_15px_rgba(0,153,255,0.3)] hover:bg-white/20 opacity-0 translate-y-6 animate-fadeIn"
+          style={{ animationDelay: `${0.2 + index * 0.2}s` }}
         >
-          Link to design
-          <ExternalLink className="w-3 h-3 -mt-[0px] -ml-1" />
-        </a>
+          <Image
+            src={project.image}
+            alt={project.title}
+            width={400}
+            height={250}
+            className="rounded-lg object-cover mb-4"
+          />
+          <h3 className="text-white text-m mb-1 project-heading tracking-wider">{project.title}</h3>
+          <p className="text-xs text-white/80 mb-4 mt-2 line-clamp-3">{project.description}</p>
 
-        <a
-  onClick={() => setShowModal(true)}
-  className="flex items-center gap-1 text-xs text-white/90 font-semibold px-2 py-1 rounded-sm backdrop-blur-md bg-white/0 border border-white/5 hover:bg-white/20 transition-all duration-300 cursor-pointer"
->
-  Details
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-3 h-3"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="white"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M4 12h14m0 0l-4-4m4 4l-4 4"
-    />
-  </svg>
-</a>
+          <div className="flex justify-between items-center mt-4">
+            <a
+              href={project.designLink}
+              className="flex items-center gap-2 text-xs text-[#0099ff] font-semibold hover:underline"
+            >
+              Link to design
+              <ExternalLink className="w-3 h-3 -mt-[0px] -ml-1" />
+            </a>
 
-      </div>
+            {project.showDetailsModal ? (
+              <button
+                onClick={() => setShowModal(true)}
+                className="flex items-center gap-1 text-xs text-white/90 font-semibold px-2 py-1 rounded-sm backdrop-blur-md bg-white/0 border border-white/5 hover:bg-white/20 transition-all duration-300 cursor-pointer"
+              >
+                Details
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-3 h-3"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="white"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 12h14m0 0l-4-4m4 4l-4 4"
+                  />
+                </svg>
+              </button>
+            ) : (
+              <span className="flex items-center gap-1 text-xs text-white/50 font-semibold px-2 py-1 rounded-sm border border-white/5">
+                Details
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
+  )}
 
-    {/* Project 2 */}
-    <div
-  className="flex-1 bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg p-4 rounded-lg transition-all duration-700 hover:scale-105 hover:shadow-[0_0_15px_rgba(0,153,255,0.3)] hover:bg-white/20 opacity-0 translate-y-6 animate-fadeIn"
-  style={{ animationDelay: "0.5s" }}
->
-
-      <Image
-        src="/comradz.png"
-        alt="Project 2"
-        width={400}
-        height={250}
-        className="rounded-lg object-cover mb-4"
-      />
-      <h3 className="text-white text-m mb-1 project-heading tracking-wider">Project Two</h3>
-      <p className="text-xs text-white/80 mb-4 mt-2">
-        Description of Project Two
-      </p>
-
-      {/* Footer links */}
-      <div className="flex justify-between items-center mt-4">
-        <a
-          href="#"
-          className="flex items-center gap-2 text-xs text-[#0099ff] font-semibold hover:underline"
-        >
-          Link to design
-          <ExternalLink className="w-3 h-3 -mt-[0px] -ml-1" />
-        </a>
-
-        <a
-          href="#"
-          className="flex items-center gap-1 text-xs text-white/90 font-semibold px-2 py-1 rounded-sm backdrop-blur-md bg-white/0 border border-white/5 hover:bg-white/20 transition-all duration-300"
-        >
-          Details
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-3 h-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="white"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 12h14m0 0l-4-4m4 4l-4 4"
-            />
-          </svg>
-        </a>
-      </div>
-    </div>
-
-    {/* Project 3 */}
-   <div
-  className="flex-1 bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg p-4 rounded-lg transition-all duration-700 hover:scale-105 hover:shadow-[0_0_15px_rgba(0,153,255,0.3)] hover:bg-white/20 opacity-0 translate-y-6 animate-fadeIn"
-  style={{ animationDelay: "0.8s" }}
->
-
-      <Image
-        src="/comradz.png"
-        alt="Project 3"
-        width={400}
-        height={250}
-        className="rounded-lg object-cover mb-4"
-      />
-      <h3 className="text-white text-m mb-1 project-heading tracking-wider">Project Three</h3>
-      <p className="text-xs text-white/80 mb-4 mt-2">
-        Description of Project Three
-      </p>
-
-      {/* Footer links */}
-      <div className="flex justify-between items-center mt-4">
-        <a
-          href="#"
-          className="flex items-center gap-2 text-xs text-[#0099ff] font-semibold hover:underline"
-        >
-          Link to design
-          <ExternalLink className="w-3 h-3 -mt-[0px] -ml-1" />
-        </a>
-
-        <a
-          href="#"
-          className="flex items-center gap-1 text-xs text-white/90 font-semibold px-2 py-1 rounded-sm backdrop-blur-md bg-white/0 border border-white/5 hover:bg-white/20 transition-all duration-300"
-        >
-          Details
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-3 h-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="white"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 12h14m0 0l-4-4m4 4l-4 4"
-            />
-          </svg>
-        </a>
-      </div>
-    </div>
-    {/* Only for Project 1 */}
-{/* Only for Project 1 */}
-{showModal && (
+  {showModal && (
   <div
     className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm"
     onClick={() => setShowModal(false)}
@@ -1168,38 +1100,32 @@ const sideBtn = (id: string, Icon: any, ref: React.RefObject<HTMLDivElement>) =>
   </div>
 )}
 
-
-
-
-    {/* Fade-in animation & font */}
-    <style jsx>{`
-      @font-face {
-        font-family: 'CreatoDisplay';
-        src: url('/fonts/CreatoDisplay-Regular.otf') format('opentype');
-        font-weight: normal;
-        font-style: normal;
+  {/* Fade-in animation & font */}
+  <style jsx>{`
+    @font-face {
+      font-family: 'CreatoDisplay';
+      src: url('/fonts/CreatoDisplay-Regular.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    .project-heading {
+      font-family: 'CreatoDisplay', sans-serif;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
-      .project-heading {
-        font-family: 'CreatoDisplay', sans-serif;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .animate-fadeIn {
-        animation: fadeIn 0.7s forwards;
-      }
-    `}</style>
-  </div>
-
-  
-)}
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.7s forwards;
+    }
+  `}</style>
+</div>
 
 
   </div>
