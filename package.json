@@ -1,0 +1,12 @@
+{
+  "name": "portfolio-root",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix myportfolio",
+    "build": "npm run build --prefix myportfolio",
+    "start": "npm run start --prefix myportfolio"
+  },
+  "dependencies": {
+    "next": "16.1.6"
+  }
+}
