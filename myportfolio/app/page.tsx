@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { Navbar, Typography } from "@material-tailwind/react";
 import { Inter } from "next/font/google";
 import { Home as HomeIcon, User, Video, Award, Mail, Code, Medal, Globe, ArrowUpRight, Film, Palette, ExternalLink } from "lucide-react"; // added icons
 
@@ -92,11 +91,11 @@ const hasShownHello = useRef(false);
   const hasRun = useRef(false);
   const navbarRef = useRef<HTMLDivElement>(null);
 
-  const aboutRef = useRef(null);
-  const portfolioRef = useRef(null);
-  const certRef = useRef(null);
-  const contactRef = useRef(null);
-  const heroRef = useRef(null);
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const portfolioRef = useRef<HTMLDivElement>(null);
+  const certRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   const [showSideNav, setShowSideNav] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -166,7 +165,7 @@ useEffect(() => {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const index = parseInt(entry.target.dataset.index || "0");
+          const index = parseInt((entry.target as HTMLElement).dataset.index || "0");
           setButtonsVisible((prev) => {
             const newState = [...prev];
             newState[index] = true;
@@ -287,12 +286,9 @@ useEffect(() => {
     { name: "Portfolio", ref: portfolioRef },
     { name: "Contact", ref: contactRef },
   ].map((item) => (
-    <Typography
+    <li
       key={item.name}
-      as="li"
-      variant="small"
-      color="blue-gray"
-      className={`p-1 font-normal cursor-pointer ${
+      className={`p-1 font-normal cursor-pointer text-white ${
         activeSection.toLowerCase() === item.name.toLowerCase()
           ? "border-b-2 border-white"
           : ""
@@ -307,7 +303,7 @@ useEffect(() => {
       }}
     >
       {item.name}
-    </Typography>
+    </li>
   ))}
 </ul>
 
@@ -323,7 +319,7 @@ useEffect(() => {
 }, [showModal]);
 
 // SIDE NAV BUTTON
-const sideBtn = (id: string, Icon: any, ref: React.RefObject<HTMLDivElement>) => (
+const sideBtn = (id: string, Icon: any, ref: React.RefObject<HTMLDivElement | null>) => (
   <button
     onClick={() => ref.current?.scrollIntoView({ behavior: "smooth" })}
     className={`
@@ -361,7 +357,7 @@ const sideBtn = (id: string, Icon: any, ref: React.RefObject<HTMLDivElement>) =>
       {/* NAVBAR */}
       <div className="relative z-50">
         
-        <Navbar
+        <nav
          ref={navbarRef}
           className={`sticky top-0 w-full rounded-none px-4 py-2 lg:px-8 lg:py-4 backdrop-blur-sm bg-black/80 border-none ${inter.className}`}
         >
@@ -369,7 +365,7 @@ const sideBtn = (id: string, Icon: any, ref: React.RefObject<HTMLDivElement>) =>
             <Image src="/logo.png" alt="Logo" width={40} height={40} priority />
             <div className="hidden lg:block">{navList}</div>
           </div>
-        </Navbar>
+        </nav>
 
         {/* EDGE GLOW BELOW NAVBAR */}
         <div
